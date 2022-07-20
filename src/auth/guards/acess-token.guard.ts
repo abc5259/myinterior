@@ -12,7 +12,6 @@ export class AcessTokenGuard extends AuthGuard('jwt-access') {
   }
 
   handleRequest(err: any, user: any, info: any) {
-    console.log(err, user);
     if (err || !user) {
       throw err || new UnauthorizedException('인증 문제 발생');
     }

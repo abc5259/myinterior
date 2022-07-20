@@ -32,11 +32,11 @@ export class AuthService {
     if (!match) {
       throw new UnauthorizedException('비밀번호가 틀립니다.');
     }
-    const accessToken = this.createToken(email);
+    const accessToken = this.createToken(email, false);
     return { accessToken };
   }
 
-  createToken(email: string) {
-    return this.jwtService.sign({ email });
+  createToken(email: string, isExpert: boolean) {
+    return this.jwtService.sign({ email, isExpert });
   }
 }
