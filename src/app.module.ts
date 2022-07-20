@@ -6,6 +6,8 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import * as Joi from 'joi';
 import { User } from './users/entities/user.entity';
+import { MysqlConfigModule } from './common/config/database/config.module';
+import { MysqlConfigService } from './common/config/database/config.service';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -25,16 +27,10 @@ import { User } from './users/entities/user.entity';
         DB_NAME: Joi.string().required(),
       }),
     }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
-      username: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      synchronize: true,
-      logging: true,
-      entities: [User],
+    TypeOrmModule.forRootAsync({
+      imports: [MysqlConfigModule],
+      useClass: MysqlConfigService,
+      inject: [MysqlConfigService],
     }),
     UsersModule,
   ],
