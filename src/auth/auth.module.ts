@@ -7,7 +7,8 @@ import { ExpertsRepository } from 'src/expert/repositories/expert.repository';
 import { UsersRepository } from 'src/users/repositories/users.repository';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { JwtStrategy } from './strategy/jwt.strategy';
+import { ExpertJwtStrategy } from './strategy/jwt-access-expert.strategy';
+import { UserJwtStrategy } from './strategy/jwt-access-user.strategy';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { JwtStrategy } from './strategy/jwt.strategy';
     TypeOrmModule.forFeature([UsersRepository, ExpertsRepository]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
-  exports: [JwtStrategy],
+  providers: [AuthService, UserJwtStrategy, ExpertJwtStrategy],
+  exports: [UserJwtStrategy, ExpertJwtStrategy],
 })
 export class AuthModule {}
