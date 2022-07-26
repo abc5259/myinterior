@@ -4,26 +4,18 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ExpertsRepository } from 'src/expert/repositories/expert.repository';
 import { UsersRepository } from 'src/users/repositories/users.repository';
-import { CreateUserDto } from './dtos/create-user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersRepository: UsersRepository,
+    private readonly expertsRepository: ExpertsRepository,
     private readonly jwtService: JwtService,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto) {
-    const user = await this.usersRepository.findByEmail(createUserDto.email);
-    if (user) {
-      throw new NotFoundException('이미 존재하는 사용자입니다.');
-    }
-    await this.usersRepository.save(this.usersRepository.create(createUserDto));
-    return true;
-  }
-
-  async login({ email, password }: { email: string; password: string }) {
+  async userLogin({ email, password }: { email: string; password: string }) {
     const user = await this.usersRepository.findByEmail(email);
     if (!user) {
       throw new NotFoundException('존재하지 않는 사용자입니다.');
@@ -33,6 +25,19 @@ export class AuthService {
       throw new UnauthorizedException('비밀번호가 틀립니다.');
     }
     const accessToken = this.createToken(email, false);
+    return { accessToken };
+  }
+
+  async expertLogin({ email, password }: { email: string; password: string }) {
+    const expert = await this.expertsRepository.findByEmail(email);
+    if (!expert) {
+      throw new NotFoundException('존재하지 않는 사용자입니다.');
+    }
+    const match = await expert.checkPassword(password);
+    if (!match) {
+      throw new UnauthorizedException('비밀번호가 틀립니다.');
+    }
+    const accessToken = this.createToken(email, true);
     return { accessToken };
   }
 

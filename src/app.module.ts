@@ -8,6 +8,7 @@ import * as Joi from 'joi';
 import { MysqlConfigModule } from './common/config/database/config.module';
 import { MysqlConfigService } from './common/config/database/config.service';
 import { AuthModule } from './auth/auth.module';
+import { ExpertModule } from './expert/expert.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -34,6 +35,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     AuthModule,
     UsersModule,
+    ExpertModule,
   ],
   controllers: [AppController],
   providers: [AppService],
