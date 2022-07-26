@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ExpertsRepository } from 'src/expert/repositories/expert.repository';
 import { UsersRepository } from 'src/users/repositories/users.repository';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -18,7 +19,7 @@ import { JwtStrategy } from './strategy/jwt.strategy';
         signOptions: { expiresIn: `${60 * 60}s` },
       }),
     }),
-    TypeOrmModule.forFeature([UsersRepository]),
+    TypeOrmModule.forFeature([UsersRepository, ExpertsRepository]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
