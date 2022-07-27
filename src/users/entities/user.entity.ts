@@ -4,7 +4,7 @@ import { BeforeInsert, Column, Entity } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
 
-@Entity('User')
+@Entity()
 export class User extends CoreEntity {
   @IsEmail({ message: '이메일 형식이 아닙니다.' })
   @IsNotEmpty({ message: '이메일은 비어있을 수 없습니다.' })
