@@ -2,15 +2,12 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { ExpertsRepository } from 'src/expert/repositories/expert.repository';
+import { UsersRepository } from 'src/users/repositories/users.repository';
 
 @Injectable()
-export class ExpertJwtStrategy extends PassportStrategy(
-  Strategy,
-  'jwt-access-expert',
-) {
+export class UserJwtStrategy extends PassportStrategy(Strategy, 'jwt-access') {
   constructor(
-    private readonly expertsRepository: ExpertsRepository,
+    private readonly usersRepository: UsersRepository,
     private readonly configService: ConfigService,
   ) {
     super({
@@ -19,7 +16,7 @@ export class ExpertJwtStrategy extends PassportStrategy(
     });
   }
   async validate({ email, isExpert }) {
-    const user = await this.expertsRepository.findByEmail(email);
+    const user = await this.usersRepository.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException();
     }

@@ -8,8 +8,4 @@ export class LoginUserDto {
   @IsNotEmpty()
   @IsString()
   readonly password: string;
-
-  @IsNotEmpty()
-  @IsBoolean()
-  readonly isExpert: boolean;
 }

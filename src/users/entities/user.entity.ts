@@ -1,8 +1,14 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { CoreEntity } from 'src/common/entities/core.entity';
-import { BeforeInsert, Column, Entity } from 'typeorm';
+import { BeforeInsert, Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from '@nestjs/common';
+import { Expert } from './expert.entity';
+
+export enum UserRole {
+  User = 'User',
+  Expert = 'Expert',
+}
 
 @Entity()
 export class User extends CoreEntity {
@@ -20,6 +26,14 @@ export class User extends CoreEntity {
   @IsNotEmpty({ message: '이름은 비어있을 수 없습니다.' })
   @Column()
   nickname: string;
+
+  @IsNotEmpty()
+  @Column({ type: 'enum', enum: UserRole })
+  role: UserRole;
+
+  @OneToOne((type) => Expert)
+  @JoinColumn()
+  expert: Expert;
 
   @BeforeInsert()
   async hashpassword(): Promise<void> {

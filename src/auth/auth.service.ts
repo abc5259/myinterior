@@ -4,14 +4,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ExpertsRepository } from 'src/expert/repositories/expert.repository';
 import { UsersRepository } from 'src/users/repositories/users.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersRepository: UsersRepository,
-    private readonly expertsRepository: ExpertsRepository,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -24,24 +22,11 @@ export class AuthService {
     if (!match) {
       throw new UnauthorizedException('비밀번호가 틀립니다.');
     }
-    const accessToken = this.createToken(email, false);
+    const accessToken = this.createToken(email);
     return { accessToken };
   }
 
-  async expertLogin({ email, password }: { email: string; password: string }) {
-    const expert = await this.expertsRepository.findByEmail(email);
-    if (!expert) {
-      throw new NotFoundException('존재하지 않는 사용자입니다.');
-    }
-    const match = await expert.checkPassword(password);
-    if (!match) {
-      throw new UnauthorizedException('비밀번호가 틀립니다.');
-    }
-    const accessToken = this.createToken(email, true);
-    return { accessToken };
-  }
-
-  createToken(email: string, isExpert: boolean) {
-    return this.jwtService.sign({ email, isExpert });
+  createToken(email: string) {
+    return this.jwtService.sign({ email });
   }
 }
