@@ -23,7 +23,7 @@ export class UsersService {
     await this.usersRepository.save(
       this.usersRepository.create({ ...createUserDto, role: UserRole.User }),
     );
-    return true;
+    return { result: true };
   }
 
   async createExpert({
@@ -56,6 +56,6 @@ export class UsersService {
         expert,
       }),
     );
-    return true;
+    return { result: true };
   }
 }
