@@ -3,12 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ExpertsRepository } from 'src/expert/repositories/expert.repository';
 import { UsersRepository } from 'src/users/repositories/users.repository';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { ExpertJwtStrategy } from './strategy/jwt-access-expert.strategy';
-import { UserJwtStrategy } from './strategy/jwt-access-user.strategy';
+import { UserJwtStrategy } from './strategy/jwt-access.strategy';
 
 @Module({
   imports: [
@@ -20,10 +18,10 @@ import { UserJwtStrategy } from './strategy/jwt-access-user.strategy';
         signOptions: { expiresIn: `${60 * 60}s` },
       }),
     }),
-    TypeOrmModule.forFeature([UsersRepository, ExpertsRepository]),
+    TypeOrmModule.forFeature([UsersRepository]),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserJwtStrategy, ExpertJwtStrategy],
-  exports: [UserJwtStrategy, ExpertJwtStrategy],
+  providers: [AuthService, UserJwtStrategy],
+  exports: [UserJwtStrategy],
 })
 export class AuthModule {}
