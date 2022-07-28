@@ -27,6 +27,7 @@ export class User extends CoreEntity {
   @Column()
   nickname: string;
 
+  @IsNotEmpty()
   @Column({ type: 'enum', enum: UserRole })
   role: UserRole;
 

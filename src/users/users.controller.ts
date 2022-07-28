@@ -5,6 +5,7 @@ import { User } from './entities/user.entity';
 
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { CreateExpertDto } from './dtos/create-expert.dto';
 
 @Controller('users')
 export class UsersController {
@@ -19,5 +20,15 @@ export class UsersController {
   @Post('/register')
   async register(@Body() createUserDto: CreateUserDto) {
     return this.usersService.createUser(createUserDto);
+  }
+}
+
+@Controller('expert')
+export class ExpertController {
+  constructor(private readonly usersService: UsersService) {}
+
+  @Post('/register')
+  async registerExpert(@Body() createExpertDto: CreateExpertDto) {
+    return this.usersService.createExpert(createExpertDto);
   }
 }

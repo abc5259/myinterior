@@ -14,6 +14,6 @@ export class Expert {
   @Column()
   specialty: string;
 
-  @Column({ default: null })
+  @Column({ nullable: true })
   info: string;
 }
